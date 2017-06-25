@@ -31,7 +31,7 @@ private:
     void start_session(const std::string &id);
     void stop_session(const std::string &id);
 
-    void withdraw(const StreamSession::Record &entry);
+    void withdraw(StreamSession::Record &entry);
 
     static const std::size_t worker_count;
 
@@ -43,4 +43,4 @@ private:
 #endif // ifdef STREAM_POOL_TESTING_ENABLED
 }; // class StreamPool
 
-#endif // STREAM_POOL_STREAM_POOL_HPP
+#endif // ifndef STREAM_POOL_STREAM_POOL_HPP

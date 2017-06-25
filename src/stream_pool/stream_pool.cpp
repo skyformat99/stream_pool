@@ -29,3 +29,9 @@ StreamPool::start()
 
 
 }
+
+void
+withdraw(StreamSession::Record &entry)
+{
+    sessions.erase(entry);
+}

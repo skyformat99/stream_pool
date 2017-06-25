@@ -3,8 +3,11 @@
 
 // EXTERNAL DEPENDENCIES
 // =============================================================================
-#include <unordered_map> // std::unordered_map
-#include <string>        // std::string
+#include <unordered_map>      // std::unordered_map
+#include <string>             // std::string
+#include <chrono>             // std::chrono::seconds
+#include <condition_variable> // std::condition_variable
+#include <mutex>              // std::mutex
 
 
 
@@ -28,11 +31,19 @@ private:
     ~StreamSession();
 
 
-    start();
-    stop();
+    void start();
+    void stop();
+
+    void reader_loop();
+    void writer_loop();
+    void watchdog_loop();
 
 
-    Record enrollment;
+    static const std::chrono::seconds time_limit(20);
+
+    std::condition_variable watchdog_event;
+    std::mutex              watchdog_lock;
+    Record                  enrollment;
 }; // class StreamSession
 
-#endif // STREAM_POOL_STREAM_SESSION_STREAM_SESSION_HPP
+#endif // ifndef STREAM_POOL_STREAM_SESSION_STREAM_SESSION_HPP
