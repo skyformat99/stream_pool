@@ -6,6 +6,7 @@
 #include <deque>              // std::deque
 #include <mutex>              // std::mutex
 #include <condition_variable> // std::condition_variable
+#include <utility>            // std::[move|forward]
 
 
 
@@ -14,6 +15,7 @@ class BlockingQueue : public std::deque<T>
 {
 public:
     // constructors, assignment, destructors all default
+    // -------------------------------------------------------------------------
     BlockingQueue()                                      = default;
     BlockingQueue(const BlockingQueue &other)            = default;
     BlockingQueue(BlockingQueue &&other)                 = default;
@@ -22,26 +24,110 @@ public:
     ~BlockingQueue()                                     = default;
 
     // enqueue
-    void enqueue(const T &element);
-    void enqueue(T &&element);
+    // -------------------------------------------------------------------------
+    void
+    enqueue(const T &element)
+    {
+        {
+            std::unique_lock<std::mutex> lock(waiting);
+            this->push_back(element);
+        }
+        ready.notify_one();
+    }
+
+    void
+    enqueue(T &&element)
+    {
+        {
+            std::unique_lock<std::mutex> lock(waiting);
+            this->push_back(std::move(element));
+        }
+        ready.notify_one();
+    }
+
     template<typename ...Args>
-    void enqueue_emplace(Args &&...args);
-    void enqueue_unlocked(const T &element);
-    void enqueue_unlocked(T &&element);
+    void
+    enqueue_emplace(Args &&...args)
+    {
+        {
+            std::unique_lock<std::mutex> lock(waiting);
+            this->emplace_back(std::forward(args)...);
+        }
+        ready.notify_one();
+    }
+
+    void
+    enqueue_unlocked(const T &element)
+    {
+        this->push_back(element);
+    }
+
+    void
+    enqueue_unlocked(T &&element)
+    {
+        this->push_back(std::move(element));
+    }
+
     template<typename ...Args>
-    void enqueue_emplace_unlocked(Args &&...args);
+    void
+    enqueue_emplace_unlocked(Args &&...args)
+    {
+        this->emplace_back(std::forward(args)...);
+    }
 
     // dequeue
-    T dequeue_wait();
+    // -------------------------------------------------------------------------
+    T   
+    dequeue_wait()
+    {
+        std::unique_lock<std::mutex> lock(waiting);
+        ready.wait(lock, [this] {
+            return !this->empty();
+        });
+
+        return dequeue_unlocked();
+    }
+
     template<typename Rep, typename Period>
-    bool dequeue_wait_for(T &element,
-                          const std::chrono::duration<Rep, Period> &duration);
+    bool
+    dequeue_wait_for(T &element,
+                     const std::chrono::duration<Rep, Period> &duration)
+    {
+        dequeue_wait_until(element,
+                           std::chrono::system_clock::now() + duration);
+    }
+
     template<typename Clock, typename Duration>
-    bool dequeue_wait_until(
-        T &element,
-        const std::chrono::time_point<Clock, Duration> &timeout
-    );
-    T dequeue_unlocked();
+    bool
+    dequeue_wait_until(T &element,
+                       const std::chrono::time_point<Clock, Duration> &timeout)
+    {
+        bool success;
+        std::unique_lock<std::mutex> lock(waiting,
+                                          timeout);
+        success = lock.owns_lock();
+
+        if (success) {
+            success = ready.wait_until(lock, timeout, [this] {
+                return !this->empty();
+            });
+
+            if (success) {
+                element = std::move(this->back());
+                this->pop_back();
+            }
+        }
+
+        return success;
+    }
+
+    T   
+    dequeue_unlocked()
+    {
+        T element(std::move(this->back()));
+        this->pop_back();
+        return element;
+    }
 
 
 private:

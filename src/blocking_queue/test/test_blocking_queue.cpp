@@ -1,7 +1,8 @@
 #include <utility>                           // std::move
 #include <string>                            // std::string
-#include "gtest/gtest.h"                     // TEST
+#include "gtest/gtest.h"                     // TEST, ASSERT_*
 #include "blocking_queue/blocking_queue.hpp" // BlockingQueue
+
 
 
 TEST(enqueue, const_ref)
@@ -18,6 +19,7 @@ TEST(enqueue, const_ref)
 
     ASSERT_EQ("element", element);
 }
+
 
 TEST(enqueue, rvalue_ref)
 {
