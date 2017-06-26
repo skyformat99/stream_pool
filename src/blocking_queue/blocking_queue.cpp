@@ -1,5 +1,6 @@
-#include <stream_pool/blocking_queue.hpp> // BlockingQueue::*
-#include <utility>                        // std::[move|forward]
+#include <blocking_queue/blocking_queue.hpp> // BlockingQueue::
+#include <utility>                           // std::[move|forward]
+
 
 
 template<typename T>
@@ -25,16 +26,16 @@ BlockingQueue<T>::enqueue(T &&element)
     ready.notify_one();
 }
 
+template<typename T>
 template<typename ...Args>
 void
-BlockingQueue<T>::enqueue_emplace(Args &&..args)
+BlockingQueue<T>::enqueue_emplace(Args &&...args)
 {
     {
         std::unique_lock<std::mutex> lock(waiting);
         emplace_back(std::forward(args)...);
     }
     ready.notify_one();
-
 }
 
 
@@ -53,9 +54,11 @@ BlockingQueue<T>::enqueue_unlocked(T &&element)
     push_back(std::move(element));
 }
 
+
+template<typename T>
 template<typename ...Args>
 void
-BlockingQueue<T>::enqueue_emplace_unlocked(Args &&..args)
+BlockingQueue<T>::enqueue_emplace_unlocked(Args &&...args)
 {
     emplace_back(std::forward(args)...);
 }
@@ -67,16 +70,15 @@ BlockingQueue<T>::dequeue_wait()
 {
     std::unique_lock<std::mutex> lock(waiting);
     ready.wait(lock, [this]{
-        return size() > 0;
+        return !this->empty();
     });
-    T element(std::move(back()));
-    pop_back();
-    lock.unlock();
-    return T;
+
+    return dequeue_unlocked();
 }
 
 
-template<typename T, Rep, Period>
+template<typename T>
+template<typename Rep, typename Period>
 bool
 BlockingQueue<T>::dequeue_wait_for(
     T &element,
@@ -88,22 +90,31 @@ BlockingQueue<T>::dequeue_wait_for(
 }
 
 
-template<typename T, Clock, Duration>
+template<typename T>
+template<typename Clock, typename Duration>
 bool
 BlockingQueue<T>::dequeue_wait_until(
     T &element,
     const std::chrono::time_point<Clock, Duration> &timeout
 )
 {
-
+    bool success;
     std::unique_lock<std::mutex> lock(waiting,
                                       timeout);
+    success = lock.owns_lock();
 
-    if (!lock.owns_lock())
-        return false;
+    if (success) {
+        success = ready.wait_until(lock, timeout, [this]{
+            return !this->empty();
+        });
 
+        if (success) {
+            element = std::move(this->back());
+            this->pop_back();
+        }
+    }
 
-    ready.wait_until
+    return success;
 }
 
 
@@ -111,6 +122,7 @@ template<typename T>
 T   
 BlockingQueue<T>::dequeue_unlocked()
 {
+    T element(std::move(this->back()));
+    this->pop_back();
+    return element;
 }
-
-

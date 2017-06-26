@@ -1,6 +1,6 @@
+#include <limits>                  // std::numeric_limits
 #include "gtest/gtest.h"           // TEST
 #include "tasty_int/tasty_int.hpp" // TastyInt
-#include <limits>                  // std::numeric_limits
 
 
 
