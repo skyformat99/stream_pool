@@ -39,7 +39,7 @@ private:
     StreamWorker workers[worker_count];
 
 #ifdef STREAM_POOL_TESTING_ENABLED
-    FRIEND_TEST()
+    // FRIEND_TEST()
 #endif // ifdef STREAM_POOL_TESTING_ENABLED
 }; // class StreamPool
 

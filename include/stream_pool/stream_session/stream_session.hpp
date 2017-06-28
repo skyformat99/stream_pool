@@ -9,6 +9,10 @@
 #include <condition_variable> // std::condition_variable
 #include <mutex>              // std::mutex
 
+#ifdef STREAM_POOL_TESTING_ENABLED
+#   include <gtest/gtest.h> // FRIEND_TEST
+#endif // ifdef STREAM_POOL_TESTING_ENABLED
+
 
 
 // FORWARD DECLARATIONS
