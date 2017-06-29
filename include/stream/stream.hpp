@@ -10,12 +10,6 @@
 
 
 
-// FORWARD DECLARATIONS
-// =============================================================================
-// class StreamPool;
-
-
-
 class Stream : private BlockingQueue
 {
 public:
@@ -25,11 +19,15 @@ public:
     bool write(std::string &&payload);
 
 private:
-    static const std::chrono::seconds max_lifespan(15);
-    static const std::chrono::seconds max_downtime(5);
+    typedef std::chrono::time_point<std::chrono::system_clock> time_point;
 
-    std::chrono::time_point<std::chrono::system_clock> last_read;
-    const std::chrono::time_point<std::chrono::system_clock> expiry;
+    static time_point now();
+
+    static const std::chrono::seconds max_lifespan;
+    static const std::chrono::seconds max_downtime;
+
+    time_point last_read;
+    const time_point expiry;
 }; // class Stream
 
 #endif // ifndef STREAM_POOL_STREAM_STREAM_HPP
