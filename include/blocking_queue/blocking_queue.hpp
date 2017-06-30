@@ -4,7 +4,7 @@
 // EXTERNAL DEPENDENCIES
 // =============================================================================
 #include <deque>              // std::deque
-#include <mutex>              // std::mutex
+#include <mutex>              // std::[mutex|unique_lock|lock_guard]
 #include <condition_variable> // std::condition_variable
 #include <utility>            // std::[move|forward]
 
@@ -29,7 +29,7 @@ public:
     enqueue(const T &element)
     {
         {
-            std::unique_lock<std::mutex> lock(waiting);
+            std::lock_guard<std::mutex> lock(waiting);
             this->push_back(element);
         }
         ready.notify_one();
@@ -39,7 +39,7 @@ public:
     enqueue(T &&element)
     {
         {
-            std::unique_lock<std::mutex> lock(waiting);
+            std::lock_guard<std::mutex> lock(waiting);
             this->push_back(std::move(element));
         }
         ready.notify_one();
@@ -50,7 +50,7 @@ public:
     enqueue_emplace(Args &&...args)
     {
         {
-            std::unique_lock<std::mutex> lock(waiting);
+            std::lock_guard<std::mutex> lock(waiting);
             this->emplace_back(std::forward(args)...);
         }
         ready.notify_one();

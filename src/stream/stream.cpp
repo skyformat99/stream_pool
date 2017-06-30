@@ -1,4 +1,5 @@
-#include "stream/stream.hpp"
+#include <utility>           // std::move
+#include "stream/stream.hpp" // Stream::*
 
 
 
@@ -9,7 +10,8 @@ static const std::chrono::seconds Stream::max_downtime(5);
 
 
 Stream::Stream()
-    : last_read(time_point::max()),
+    : continue_writing(true),
+      idle_timeout(time_point::max()),
       expiry(now() + max_lifespan)
 {}
 
@@ -17,14 +19,27 @@ Stream::Stream()
 bool
 Stream::read(std::string &message)
 {
-    return false;
+    const std::chrono::seconds &timeout = std::min(idle_timeout,
+                                                   expiry);
+
+    const bool success = dequeue_wait_for(message,
+                                          timedout);
+    if (!success)
+        continue_writing = false; // make sure not to reset to true
+
+    return success;
 }
 
 
 bool
 Stream::write(std::string &&payload)
 {
-    return false;
+    const bool success = continue_writing;
+
+    if (success)
+        enqueue(std::move(payload));
+
+    return success;
 }
 
 

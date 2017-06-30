@@ -6,11 +6,12 @@
 #include <string>                            // std::string
 #include <chrono>                            // std::chrono::*
 #include <thread>                            // std::thread
+#include <atomic>                            // std::atomic
 #include "blocking_queue/blocking_queue.hpp" // BlockingQueue
 
 
 
-class Stream : private BlockingQueue
+class Stream : private BlockingQueue<std::string>
 {
 public:
     Stream();
@@ -26,8 +27,9 @@ private:
     static const std::chrono::seconds max_lifespan;
     static const std::chrono::seconds max_downtime;
 
-    time_point last_read;
-    const time_point expiry;
+    std::atomic<bool> continue_writing;
+    time_point        idle_timeout;
+    const time_point  expiry;
 }; // class Stream
 
 #endif // ifndef STREAM_POOL_STREAM_STREAM_HPP
