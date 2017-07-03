@@ -3,9 +3,10 @@
 
 // EXTERNAL DEPENDENCIES
 // =============================================================================
-#include <string>                                        // std::string
-#include <stream_pool/stream_session/stream_session.hpp> // StreamSession
-#include <stream_pool/stream_worker/stream_worker.hpp>   // StreamWorker
+#include <string>                            // std::string
+#include <blocking_queue/blocking_queue.hpp> // BlockingQueue
+#include <stream_session/stream_session.hpp> // StreamSession
+#include <stream_worker/stream_worker.hpp>   // StreamWorker
 
 #ifdef STREAM_POOL_TESTING_ENABLED
 #   include <gtest/gtest.h> // FRIEND_TEST
@@ -23,6 +24,7 @@ public:
 
 private:
     friend StreamSession;
+    friend StreamWorker;
 
     void handle(const std::string &event);
     void start();
@@ -34,6 +36,7 @@ private:
     void withdraw(StreamSession::Record &entry);
 
     static const std::size_t worker_count;
+
 
     StreamSession::Register sessions;
     StreamWorker workers[worker_count];
