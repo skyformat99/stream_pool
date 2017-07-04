@@ -11,6 +11,10 @@
 
 #include "stream_pool/stream/stream.hpp" // Stream
 
+#ifdef STREAM_POOL_TESTING_ENABLED
+#   include <gtest/gtest.h> // FRIEND_TEST
+#endif // ifdef STREAM_POOL_TESTING_ENABLED
+
 
 
 // FORWARD DECLARATIONS

@@ -3,6 +3,7 @@
 
 // EXTERNAL DEPENDENCIES
 // =============================================================================
+#include <chrono>             // std::chrono::*
 #include <deque>              // std::deque
 #include <mutex>              // std::[mutex|unique_lock|lock_guard]
 #include <condition_variable> // std::condition_variable
