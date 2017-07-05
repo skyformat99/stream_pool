@@ -7,9 +7,6 @@
 #include <chrono>                            // std::chrono::*
 #include <thread>                            // std::thread
 #include <atomic>                            // std::atomic
-#include <random>                            // std::[random_device
-                                             //      |default_random_engine
-                                             //      |uniform_int_distribution]
 #include "blocking_queue/blocking_queue.hpp" // BlockingQueue
 
 
@@ -36,7 +33,6 @@ private:
 
     static time_point now();
 
-    std::default_random_engine                  random_engine;
     std::uniform_int_distribution<outcome_type> distribution;
     std::atomic<bool>                           continue_writing;
     time_point                                  idle_timeout;

@@ -15,5 +15,6 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_LIB_DIR})
 
 
 add_subdirectory(blocking_queue)
+add_subdirectory(failure_box)
 # add_subdirectory(stream_pool)
 # add_subdirectory(stream_pool_demo)

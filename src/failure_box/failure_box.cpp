@@ -12,8 +12,8 @@ thread_local FailureBox::RandomEngine FailureBox::engine(
 
 
 FailureBox::FailureBox(const unsigned int expected_queries_per_failure)
-    : Distribution(0,
-                   expected_queries_per_failure)
+    : Distribution(expected_queries_per_failure == 0, // 1 if never fail
+                   expected_queries_per_failure - 1)  // UINT_MAX if never fail
 {}
 
 

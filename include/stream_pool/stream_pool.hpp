@@ -8,9 +8,11 @@
 #include <stream_session/stream_session.hpp> // StreamSession
 #include <stream_worker/stream_worker.hpp>   // StreamWorker
 
-#ifdef STREAM_POOL_TESTING_ENABLED
-#   include <gtest/gtest.h> // FRIEND_TEST
-#endif // ifdef STREAM_POOL_TESTING_ENABLED
+#ifdef BUILD_TESTING
+#   include <gtest/gtest.h>                       // FRIEND_TEST
+#else
+#   define FRIEND_TEST(TEST_CASE_NAME, TEST_NAME) // disable
+#endif // ifdef BUILD_TESTING
 
 
 
@@ -40,10 +42,6 @@ private:
 
     StreamSession::Register sessions;
     StreamWorker workers[worker_count];
-
-#ifdef STREAM_POOL_TESTING_ENABLED
-    // FRIEND_TEST()
-#endif // ifdef STREAM_POOL_TESTING_ENABLED
 }; // class StreamPool
 
 #endif // ifndef STREAM_POOL_STREAM_POOL_HPP

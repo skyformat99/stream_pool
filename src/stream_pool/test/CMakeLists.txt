@@ -1,5 +1,3 @@
-include(add_google_test)
-
 foreach(test_name constructors)
     add_google_test(
         NAME      test_stream_pool_${test_name}

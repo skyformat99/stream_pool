@@ -7,7 +7,7 @@ set(PROJECT_CMAKE_TEST_ENVIRON_CMAKE_INCLUDED TRUE)
 # ==============================================================================
 # External Dependencies
 # ------------------------------------------------------------------------------
-include(CTest) # sets BUILD_TEST_ENVIRON
+include(CTest) # sets BUILD_TESTING
 
 
 # Exported Variables
@@ -20,6 +20,12 @@ set(PROJECT_TEST_LIB_DIR     ${PROJECT_TEST_DIR}/lib)
 set(PROJECT_TEST_BIN_DIR     ${PROJECT_TEST_DIR}/bin)
 set(PROJECT_TEST_SCRIPT_DIR  ${PROJECT_TEST_DIR}/script)
 set(PROJECT_TEST_BUILD_DIR   ${PROJECT_BUILD_DIR}/test/src)
+
+
+# Testing Modules
+# ------------------------------------------------------------------------------
+include(add_custom_test)
+include(add_google_test)
 
 
 # Targets

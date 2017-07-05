@@ -87,6 +87,7 @@ function(add_custom_test)
         ${CUSTOM_TEST_NAME}
         PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${PROJECT_TEST_BIN_DIR}
+        COMPILE_DEFINITIONS      BUILD_TESTING
     )
 
     add_test(
