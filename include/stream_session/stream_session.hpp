@@ -28,8 +28,6 @@ class StreamSession
     friend class StreamPool;
 
 private:
-    // friend StreamPool;
-
     typedef Register::iterator Record;
 
 
