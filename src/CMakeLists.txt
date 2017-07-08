@@ -1,7 +1,11 @@
 include(cpp_restrict_qualifier) # set CPP_RESTRICT_QUALIFIER
+include(have_cpp_thread_local)  # set HAVE_CPP_THREAD_LOCAL
 
 # update compile definitions
-add_definitions(-DCPP_RESTRICT_QUALIFIER=${CPP_RESTRICT_QUALIFIER})
+add_definitions(
+    -DCPP_RESTRICT_QUALIFIER=${CPP_RESTRICT_QUALIFIER}
+    -DHAVE_CPP_THREAD_LOCAL=${HAVE_CPP_THREAD_LOCAL}
+)
 
 # update include path
 include_directories(${PROJECT_INCLUDE_DIR})

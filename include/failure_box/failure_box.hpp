@@ -30,8 +30,6 @@ private:
 
     typedef std::default_random_engine                  RandomEngine;
     typedef std::uniform_int_distribution<unsigned int> Distribution;
-
-    static thread_local RandomEngine engine;
 }; // class FailureBox
 
 #endif // FAILURE_BOX_FAILURE_BOX_HPP
