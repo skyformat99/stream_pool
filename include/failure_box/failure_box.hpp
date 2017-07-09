@@ -18,6 +18,9 @@
 class FailureBox : private std::uniform_int_distribution<unsigned int>
 {
 public:
+    typedef std::default_random_engine                  RandomEngine;
+    typedef std::uniform_int_distribution<unsigned int> Distribution;
+
     // never fail by default
     FailureBox(const unsigned int expected_queries_per_failure = 0);
 
@@ -27,9 +30,6 @@ public:
 private:
     FRIEND_TEST(constructor, a);
     FRIEND_TEST(constructor, b);
-
-    typedef std::default_random_engine                  RandomEngine;
-    typedef std::uniform_int_distribution<unsigned int> Distribution;
 }; // class FailureBox
 
 #endif // FAILURE_BOX_FAILURE_BOX_HPP

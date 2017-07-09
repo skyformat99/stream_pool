@@ -9,7 +9,6 @@ project(
 # cmake options
 set(CMAKE_VERBOSE_MAKEFILE on)
 set(CMAKE_CXX_STANDARD     11)
-set(CMAKE_CXX_COMPILER     g++)
 option(BUILD_TESTING "Enable unit testing." ON)
 
 # config defines
