@@ -9,7 +9,9 @@
 #include <mutex>              // std::mutex
 #include <thread>             // std::thread
 
-#include "stream_pool/stream/stream.hpp" // Stream
+#include "blocking_queue/blocking_queue.hpp" // BlockingQueue
+#include "stream/stream.hpp"                 // Stream
+#include "stream_pool/stream_pool.hpp"       // StreamPool
 
 #ifdef STREAM_POOL_TESTING_ENABLED
 #   include <gtest/gtest.h> // FRIEND_TEST
@@ -25,29 +27,25 @@
 
 class StreamSession
 {
-    friend class StreamPool;
-
-private:
-    typedef Register::iterator Record;
-
-
-    StreamSession();
+public:
+    StreamSession(StreamPool *const pool);
     ~StreamSession();
 
 
     void process();
-    void stop();
 
+private:
     void reader_loop();
     void writer_loop();
     void watchdog_loop();
 
-
     std::chrono::time_point<std::chrono::system_clock>
     std::condition_variable watchdog_event;
     std::mutex              watchdog_lock;
-    Record                  enrollment;
+    std::atomic<bool>       keep_alive;
+    BlockingQueue           mailbox;
     Stream                  stream;
+    StreamPool              *const pool;
 }; // class StreamSession
 
 #endif // ifndef STREAM_POOL_STREAM_SESSION_STREAM_SESSION_HPP
