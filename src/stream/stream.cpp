@@ -8,10 +8,13 @@
 static const std::chrono::seconds Stream::max_lifespan(15);
 static const std::chrono::seconds Stream::max_downtime(5);
 
+// fail roughly 1 in 100 queries
+static const unsigned int Stream::expected_query_lifespan(100);
+
 
 Stream::Stream()
     : continue_writing(true),
-      failure_box(100), // fail roughly 1 in 100 queries
+      failure_box(expected_query_lifespan),
       idle_timeout(time_point::max()),
       expiry(now() + max_lifespan)
 {}
