@@ -4,13 +4,13 @@
 // EXTERNAL DEPENDENCIES
 // =============================================================================
 // #include <unordered_map>      // std::unordered_map
-#include <chrono>             // std::chrono::*
+#include <ostream>            // std::ostream
 #include <condition_variable> // std::condition_variable
 #include <mutex>              // std::mutex
 #include <thread>             // std::thread
 
 #include "blocking_queue/blocking_queue.hpp" // BlockingQueue
-#include "stream/stream.hpp"                 // Stream
+#include "stream/stream.hpp"                 // Stream::
 #include "stream_pool/stream_pool.hpp"       // StreamPool
 
 #ifdef STREAM_POOL_TESTING_ENABLED
@@ -28,18 +28,24 @@
 class StreamSession
 {
 public:
-    StreamSession(StreamPool *const pool);
+    StreamSession(const char id,
+                  StreamPool *const pool);
     ~StreamSession();
 
 
     void process();
 
 private:
+    friend std::thread;
+
     void reader_loop();
     void writer_loop();
     void watchdog_loop();
 
-    std::chrono::time_point<std::chrono::system_clock>
+    std::ostream &log(const char *const function_name);
+
+    const char              id;
+    Stream::time_point      timeout;
     std::condition_variable watchdog_event;
     std::mutex              watchdog_lock;
     std::atomic<bool>       keep_alive;
