@@ -27,10 +27,12 @@ Stream::read(std::string &message)
                                                    expiry);
 
     const bool success = failure_box.query()
-                      && dequeue_wait_for(message,
-                                          timedout);
-    if (!success)
-        continue_writing = false; // make sure not to reset to true
+                      && dequeue_wait_until(message,
+                                            timeout);
+    if (success)
+        idle_timeout = now() + max_downtime; // update timeout
+    else
+        continue_writing = false;            // make sure not to reset to true
 
     return success;
 }
@@ -39,8 +41,7 @@ Stream::read(std::string &message)
 bool
 Stream::write(std::string &&payload)
 {
-    const bool success = failure_box.query()
-                      && continue_writing;
+    const bool success = continue_writing;
 
     if (success)
         enqueue(std::move(payload));

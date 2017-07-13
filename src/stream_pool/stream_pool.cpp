@@ -26,8 +26,12 @@ StreamPool::~StreamPool()
 void
 StreamPool::start()
 {
+}
 
-
+void
+StreamPool::start_session(StreamSession *const session)
+{
+    starting.enqueue_emplace(session);
 }
 
 void

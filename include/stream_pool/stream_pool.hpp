@@ -37,11 +37,12 @@ private:
 
     void withdraw(StreamSession::Record &entry);
 
-    static const std::size_t worker_count;
+    static const sd::size_t worker_count;
 
 
-    StreamSession::Register sessions;
-    StreamWorker workers[worker_count];
+    BlockingQueue<StreamSession *> starting;
+    StreamSession::Register        sessions;
+    StreamWorker                   workers[worker_count];
 }; // class StreamPool
 
 #endif // ifndef STREAM_POOL_STREAM_POOL_HPP

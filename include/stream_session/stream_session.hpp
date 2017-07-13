@@ -37,8 +37,6 @@ public:
 private:
     friend std::thread;
 
-    static const std::chrono::seconds max_idle;
-
     void reader_loop();
     void writer_loop();
 
