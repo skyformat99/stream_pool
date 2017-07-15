@@ -114,8 +114,8 @@ public:
             });
 
             if (success) {
-                element = std::move(this->back());
-                this->pop_back();
+                element = std::move(this->front());
+                this->pop_front();
             }
         }
 
@@ -125,8 +125,8 @@ public:
     T   
     dequeue_unlocked()
     {
-        T element(std::move(this->back()));
-        this->pop_back();
+        T element(std::move(this->front()));
+        this->pop_front();
         return element;
     }
 

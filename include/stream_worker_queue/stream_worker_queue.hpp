@@ -3,9 +3,10 @@
 
 // EXTERNAL DEPENDENCIES
 // =============================================================================
-#include <deque>                             // std::deque
-#include <mutex>                             // std::[mutex|lock_guard]
-#include <condition_variable>                // std::condition_variable
+#include <deque>              // std::deque
+#include <atomic>             // std::atomic
+#include <mutex>              // std::[mutex|lock_guard]
+#include <condition_variable> // std::condition_variable
 
 
 
@@ -25,15 +26,10 @@ public:
 
     Session *
     dequeue();
-    {
-        {
-            std::lock_guard<std::mutex> lock(waiting);
-            this->emplace_back(session);
-        }
-        ready.notify_one();
-    }
+
 
 private:
+    std::atomic<bool>       finished;
     std::mutex              waiting;
     std::condition_variable ready;
 }; // class StreamWorkerQueue
