@@ -3,6 +3,7 @@
 
 
 StreamWorkerQueue::StreamWorkerQueue()
+    finished(false)
 {
 
 }
@@ -10,8 +11,9 @@ StreamWorkerQueue::StreamWorkerQueue()
 
 StreamWorkerQueue::~StreamWorkerQueue()
 {
+    finished = true;
     ready.notify_all();
-
+    partner_ready.notify_one();
 }
 
 
@@ -30,15 +32,37 @@ StreamWorkerQueue::enqueue(StreamSession *const session)
 Session *
 StreamWorkerQueue::dequeue()
 {
+    if (finished)
+        return nullptr;
+
     std::unique_lock<std::mutex> lock(waiting);
     ready.wait(lock, [this] {
-        return finished || !this->empty();
+        return this->finished || !this->empty();
     });
 
     if (finished)
         return nullptr;
 
     Session *const session = this->front();
-    this->pop_front();
+
+    if (need_partner) {
+        need_partner = false;
+        partner_ready.notify_one()
+        this->pop_front();
+        return session;
+    }
+
+    need_partner = true;
+    partner_ready.wait(lock, [this] {
+       return this->finished || !this->need_partner;
+    });
+
+    lock.unlock();
+
+    if (finished) {
+        session->stop();
+        return nullptr;
+    }
+
     return session;
 }

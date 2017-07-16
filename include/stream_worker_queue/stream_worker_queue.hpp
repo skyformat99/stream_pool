@@ -32,6 +32,8 @@ private:
     std::atomic<bool>       finished;
     std::mutex              waiting;
     std::condition_variable ready;
+    bool                    need_partner;
+    std::condition_variable partner_ready;
 }; // class StreamWorkerQueue
 
 #endif // ifndef STREAM_WORKER_QUEUE_STREAM_WORKER_QUEUE_HPP
