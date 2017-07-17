@@ -24,8 +24,8 @@ public:
     void
     enqueue(StreamSession *const session);
 
-    Session *
-    dequeue();
+    void (StreamSession::*)()
+    dequeue(StreamSession *&session);
 
 
 private:

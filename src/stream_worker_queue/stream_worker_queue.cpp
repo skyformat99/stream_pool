@@ -1,4 +1,5 @@
 #include <stream_worker_queue/stream_worker_queue.hpp>
+#include <stream_session/stream_session.hpp>
 
 
 
@@ -29,8 +30,8 @@ StreamWorkerQueue::enqueue(StreamSession *const session)
 }
 
 
-Session *
-StreamWorkerQueue::dequeue()
+void (StreamSession::*)()
+StreamWorkerQueue::dequeue(StreamSession *&session)
 {
     if (finished)
         return nullptr;
@@ -43,13 +44,13 @@ StreamWorkerQueue::dequeue()
     if (finished)
         return nullptr;
 
-    Session *const session = this->front();
+    session = this->front();
 
     if (need_partner) {
         need_partner = false;
-        partner_ready.notify_one()
+        partner_ready.notify_one();
         this->pop_front();
-        return session;
+        return &Session::writer_loop;
     }
 
     need_partner = true;
@@ -64,5 +65,5 @@ StreamWorkerQueue::dequeue()
         return nullptr;
     }
 
-    return session;
+    return &Session::reader_loop;
 }
