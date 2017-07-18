@@ -7,7 +7,7 @@
 static const std::chrono::seconds StreamSession::max_idle(3);
 
 
-StreamSession::StreamSession(const char id,
+StreamSession::StreamSession(const unsigned char id,
                              StreamPool *const pool)
     : keep_alive(true),
       mailbox(),

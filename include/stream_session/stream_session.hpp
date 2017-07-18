@@ -26,12 +26,13 @@ class StreamPool;
 class StreamSession
 {
 public:
-    StreamSession(const char id,
+    StreamSession(const unsigned char id,
                   StreamPool *const pool);
     ~StreamSession();
 
 
     void process();
+    void start();
     void stop();
 
 private:
@@ -42,7 +43,7 @@ private:
 
     std::ostream &log(const char *const function_name);
 
-    const char                 id;
+    const unsigned char        id;
     unsigned int               counter;
     Stream::time_point         timeout;
     std::atomic<bool>          keep_alive;
