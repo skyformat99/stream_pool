@@ -22,6 +22,9 @@ public:
     ~StreamWorkerQueue();
 
     void
+    stop();
+
+    void
     enqueue(StreamSession *const session);
 
     void (StreamSession::*)()
@@ -29,7 +32,7 @@ public:
 
 
 private:
-    std::atomic<bool>       finished;
+    bool                    finished;
     std::mutex              waiting;
     std::condition_variable ready;
     bool                    need_partner;

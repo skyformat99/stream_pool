@@ -4,15 +4,23 @@
 
 
 StreamWorkerQueue::StreamWorkerQueue()
-    finished(false)
-{
-
-}
+    : finished(false),
+      need_partner(false)
+{}
 
 
 StreamWorkerQueue::~StreamWorkerQueue()
+{}
+
+void
+StreamWorkerQueue::stop()
 {
-    finished = true;
+    {
+        std::lock_guard<std::mutex> lock(waiting);
+        finished = true;
+        this->clear();
+    }
+
     ready.notify_all();
     partner_ready.notify_one();
 }
@@ -23,6 +31,10 @@ StreamWorkerQueue::enqueue(StreamSession *const session)
 {
     {
         std::lock_guard<std::mutex> lock(waiting);
+
+        if (finished)
+            return;
+
         this->emplace_back(session);
     }
 
@@ -33,9 +45,6 @@ StreamWorkerQueue::enqueue(StreamSession *const session)
 void (StreamSession::*)()
 StreamWorkerQueue::dequeue(StreamSession *&session)
 {
-    if (finished)
-        return nullptr;
-
     std::unique_lock<std::mutex> lock(waiting);
     ready.wait(lock, [this] {
         return this->finished || !this->empty();
@@ -57,8 +66,6 @@ StreamWorkerQueue::dequeue(StreamSession *&session)
     partner_ready.wait(lock, [this] {
        return this->finished || !this->need_partner;
     });
-
-    lock.unlock();
 
     if (finished) {
         session->stop();
