@@ -5,4 +5,4 @@ set(
 )
 
 add_executable(stream_pool_demo ${sources})
-target_link_libraries(stream_pool_demo ${STREAM_POOL_LIBRARY})
+target_link_libraries(stream_pool_demo stream_pool)
