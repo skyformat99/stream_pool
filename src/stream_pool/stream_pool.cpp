@@ -29,6 +29,19 @@ StreamPool::start()
 }
 
 void
+StreamPool::stop_all_sessions()
+{
+
+}
+
+void
+StreamPool::route(const std::string &session_id,
+                  const std::string &payload)
+{
+
+}
+
+void
 StreamPool::start_session(StreamSession *const session)
 {
     starting.enqueue_emplace(session);

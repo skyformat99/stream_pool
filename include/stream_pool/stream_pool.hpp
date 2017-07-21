@@ -27,21 +27,21 @@ public:
 
 private:
     void handle(const std::string &event);
-    void start();
-    void stop();
-    void route(const unsigned char id);
-    void start_session(const std::string &id);
+    void stop_all_sessions();
+    void route(const std::string &session_id,
+               const std::string &payload);
+
     void stop_session(const std::string &id);
 
     void withdraw(StreamSession::Record &entry);
 
-    static const sd::size_t worker_count;
+    static const std::size_t worker_count;
 
 
 
-    StreamSession                  sesssions[UCHAR_MAX + 1];
-    BlockingQueue<StreamSession *> starting;
-    StreamWorker                   workers[worker_count];
+    std::map<std::string, StreamSession> sessions;
+    BlockingQueue<StreamSession *>       starting;
+    StreamWorker                         workers[worker_count];
 }; // class StreamPool
 
 #endif // ifndef STREAM_POOL_STREAM_POOL_HPP

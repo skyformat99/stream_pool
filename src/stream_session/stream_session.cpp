@@ -7,29 +7,28 @@
 static const std::chrono::seconds StreamSession::max_idle(3);
 
 
-StreamSession::StreamSession(const unsigned char id,
-                             StreamPool *const pool)
-    : keep_alive(true),
-      mailbox(),
-      stream(),
-      id(id),
-      counter(0),
-      pool(pool),
-      timeout(Stream::now())
-{
-    pool->start_session(this);
-}
-
+StreamSession::StreamSession()
+{}
 
 ~StreamSession::StreamSession()
 {}
 
 void
-StreamSession::process()
+StreamSession::start(const std::string &id,
+                     StreamPool *const pool)
+{
+    this->keep_alive = true;
+    this->id         = id;
+    this->pool       = pool;
+    pool->session_ready(this);
+}
+
+void
+StreamSession::process(std::string &&message)
 {
     log("process") << "enter" << std::endl;
 
-    mailbox.enqueue_emplace(std::to_string(counter++));
+    mailbox.enqueue_emplace(message);
 
     log("process") << "exit" << std::endl;
 }
@@ -70,7 +69,7 @@ StreamSession::writer_loop()
                                        max_idle)
            && keep_alive
            && stream.write(std::move(message)))
-        log("writer_loop") << "wrote message" << std::endl;
+        log("writer_loop") << "wrote message (" << counter++ ')' << std::endl;
 
     log("writer_loop") << "exit" << std::endl;
 
