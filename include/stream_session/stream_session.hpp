@@ -30,7 +30,7 @@ public:
     ~StreamSession();
 
 
-    void process();
+    void process(std::string &&message);
     void start(const std::string &id,
                StreamPool *const pool);
     void stop();

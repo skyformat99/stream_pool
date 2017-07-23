@@ -13,11 +13,20 @@ static const unsigned int Stream::expected_query_lifespan(100);
 
 
 Stream::Stream()
-    : continue_writing(true),
-      failure_box(expected_query_lifespan),
-      idle_timeout(time_point::max()),
-      expiry(now() + max_lifespan)
+    : failure_box(expected_query_lifespan),
 {}
+
+
+Stream::~Stream()
+{}
+
+
+Stream::start()
+{
+    continue_writing = true;
+    idle_timeout     = time_point::max();
+    expiry           = now() + max_lifespan;
+}
 
 
 bool

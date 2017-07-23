@@ -20,6 +20,7 @@ StreamSession::start(const std::string &id,
     this->keep_alive = true;
     this->id         = id;
     this->pool       = pool;
+    this->stream.start();
     pool->session_ready(this);
 }
 
