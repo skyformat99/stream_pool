@@ -26,12 +26,13 @@ class StreamPool;
 class StreamSession
 {
 public:
+    typedef std::map<std::string, StreamSession> Register;
+
     StreamSession();
     ~StreamSession();
 
-
     void process(std::string &&message);
-    void start(const std::string &id,
+    void start(Register::iterator &entry,
                StreamPool *const pool);
     void stop();
 
@@ -43,11 +44,11 @@ private:
 
     std::ostream &log(const char *const function_name);
 
-    std::string                id;
     unsigned int               counter;
     std::atomic<bool>          keep_alive;
     BlockingQueue<std::string> mailbox;
     Stream                     stream;
+    Register::iterator         entry;
     StreamPool          *const pool;
 }; // class StreamSession
 

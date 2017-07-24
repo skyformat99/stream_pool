@@ -32,8 +32,8 @@ StreamWorkerQueue::enqueue(StreamSession *const session)
     {
         std::lock_guard<std::mutex> lock(waiting);
 
-        if (finished)
-            return;
+        // if (finished)
+        //     return;
 
         this->emplace_back(session);
     }

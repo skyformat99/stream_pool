@@ -9,13 +9,17 @@
 
 // FORWARD DECLARATIONS
 // =============================================================================
-class StreamPool;
+class StreamWorkerQueue;
 
 
-class StreamWorker : private std::thread
+class StreamWorker : public std::thread
 {
-    StreamWorker(StreamPool *const pool)
+public:
+    StreamWorker(StreamWorkerQueue &schedule);
+    StreamWorker();
 
+    static void
+    loop(StreamWorkerQueue &schedule);
 }; // class StreamWorker
 
 #endif // ifndef STREAM_WORKER_STREAM_WORKER_HPP

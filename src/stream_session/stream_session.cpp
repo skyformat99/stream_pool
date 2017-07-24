@@ -14,11 +14,11 @@ StreamSession::StreamSession()
 {}
 
 void
-StreamSession::start(const std::string &id,
+StreamSession::start(Register::iterator &entry,
                      StreamPool *const pool)
 {
     this->keep_alive = true;
-    this->id         = id;
+    this->entry      = entry;
     this->pool       = pool;
     this->stream.start();
     pool->session_ready(this);
@@ -82,7 +82,7 @@ std::ostream &
 StreamSession::log(const char *const function_name)
 {
     return std::cout
-        << "StreamSession(" << id
+        << "StreamSession(" << entry->first // session_id
                     << ", " << this
                     << ", " << std::this_thread::get_id()
                             << ")::" << function_name << "() -- ";
