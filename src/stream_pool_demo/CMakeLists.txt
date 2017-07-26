@@ -1,3 +1,4 @@
+set(STREAMER_INCLUDE_DIR ${PROJECT_INCLUDE_DIR}/streamer)
 set(
     sources
     stream_pool_demo.cpp
@@ -5,4 +6,5 @@ set(
 )
 
 add_executable(stream_pool_demo ${sources})
+
 target_link_libraries(stream_pool_demo stream_pool)
