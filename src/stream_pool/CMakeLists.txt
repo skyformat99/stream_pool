@@ -1,8 +1,12 @@
 set(STREAM_POOL_INCLUDE_DIR ${PROJECT_INCLUDE_DIR}/stream_pool)
 set(
+    STREAM_POOL_HEADERS
+    ${STREAM_POOL_INCLUDE_DIR}/stream_pool.hpp
+)
+set(
     sources
     stream_pool.cpp
-    ${STREAM_POOL_INCLUDE_DIR}/stream_pool.hpp
+    ${STREAM_POOL_HEADERS}
 )
 
 # build stream_pool library

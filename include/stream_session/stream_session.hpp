@@ -4,12 +4,12 @@
 // EXTERNAL DEPENDENCIES
 // =============================================================================
 // #include <unordered_map>      // std::unordered_map
-#include <chrono>             // std::chrono::*
-#include <condition_variable> // std::condition_variable
-#include <mutex>              // std::mutex
+#include <ostream>            // std::ostream
 #include <thread>             // std::thread
+#include <chrono>             // std::chrono
 
-#include "stream_pool/stream/stream.hpp" // Stream
+#include "blocking_queue/blocking_queue.hpp" // BlockingQueue
+#include "stream/stream.hpp"                 // Stream::
 
 #ifdef STREAM_POOL_TESTING_ENABLED
 #   include <gtest/gtest.h> // FRIEND_TEST
@@ -19,35 +19,37 @@
 
 // FORWARD DECLARATIONS
 // =============================================================================
-// class StreamPool;
+class StreamPool;
 
 
 
 class StreamSession
 {
-    friend class StreamPool;
-
-private:
-    typedef Register::iterator Record;
-
+public:
+    typedef std::map<std::string, StreamSession> Register;
 
     StreamSession();
     ~StreamSession();
 
-
-    void process();
+    void process(std::string &&message);
+    void start(Register::iterator &entry,
+               StreamPool *const pool);
     void stop();
+
+private:
+    friend std::thread;
 
     void reader_loop();
     void writer_loop();
-    void watchdog_loop();
 
+    std::ostream &log(const char *const function_name);
 
-    std::chrono::time_point<std::chrono::system_clock>
-    std::condition_variable watchdog_event;
-    std::mutex              watchdog_lock;
-    Record                  enrollment;
-    Stream                  stream;
+    unsigned int               counter;
+    std::atomic<bool>          keep_alive;
+    BlockingQueue<std::string> mailbox;
+    Stream                     stream;
+    Register::iterator         entry;
+    StreamPool          *const pool;
 }; // class StreamSession
 
 #endif // ifndef STREAM_POOL_STREAM_SESSION_STREAM_SESSION_HPP

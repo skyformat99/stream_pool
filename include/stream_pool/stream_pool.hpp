@@ -3,6 +3,7 @@
 
 // EXTERNAL DEPENDENCIES
 // =============================================================================
+#include <climits>                           // UCHAR_MAX
 #include <string>                            // std::string
 #include <blocking_queue/blocking_queue.hpp> // BlockingQueue
 #include <stream_session/stream_session.hpp> // StreamSession
@@ -25,23 +26,21 @@ public:
 
 
 private:
-    friend StreamSession;
-    friend StreamWorker;
+    friend class StreamSession;
 
     void handle(const std::string &event);
-    void start();
-    void stop();
-    void route(const std::string &id, const std::string &payload);
-    void start_session(const std::string &id);
+    void stop_sessions();
+    void route(std::string &&session_id,
+               std::string &&payload);
+
     void stop_session(const std::string &id);
 
     void withdraw(StreamSession::Record &entry);
 
-    static const std::size_t worker_count;
-
-
-    StreamSession::Register sessions;
-    StreamWorker workers[worker_count];
+    std::mutex
+    StreamSession::Register        session_register;
+    BlockingQueue<StreamSession *> ready_sessions;
+    StreamWorker                   workers[8];
 }; // class StreamPool
 
 #endif // ifndef STREAM_POOL_STREAM_POOL_HPP

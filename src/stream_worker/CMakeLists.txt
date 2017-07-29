@@ -1,0 +1,18 @@
+set(STREAM_WORKER_INCLUDE_DIR ${PROJECT_INCLUDE_DIR}/stream_worker)
+set(
+    STREAM_WORKER_HEADERS
+    ${STREAM_WORKER_INCLUDE_DIR}/stream_worker.hpp
+)
+set(
+    sources
+    stream_worker.cpp
+    ${STREAM_WORKER_HEADERS}
+)
+
+# build stream_worker library
+add_library(stream_worker ${sources})
+
+
+if(BUILD_TESTING)
+    add_subdirectory(test)
+endif()

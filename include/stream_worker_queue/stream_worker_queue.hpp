@@ -3,29 +3,40 @@
 
 // EXTERNAL DEPENDENCIES
 // =============================================================================
-#include <deque>                             // std::deque
-#include <mutex>                             // std::[mutex|lock_guard]
-#include <stream_worker/stream_worker.hpp>   // StreamWorker
-#include <stream_session/stream_session.hpp> // StreamSession
-
-// stream_worker_queue::node
-#include <stream_worker_queue/stream_worker_queue/node.hpp>
+#include <deque>              // std::deque
+#include <atomic>             // std::atomic
+#include <mutex>              // std::[mutex|lock_guard]
+#include <condition_variable> // std::condition_variable
 
 
 
 // FORWARD DECLARATIONS
 // =============================================================================
+class StreamSession;
+
+
 class StreamWorkerQueue : private std::deque<StreamSession *>
 {
 public:
     StreamWorkerQueue();
     ~StreamWorkerQueue();
 
+    void
+    stop();
+
+    void
+    enqueue(StreamSession *const session);
+
+    void (StreamSession::*)()
+    dequeue(StreamSession *&session);
+
 
 private:
-
-
-
+    bool                    finished;
+    std::mutex              waiting;
+    std::condition_variable ready;
+    bool                    need_partner;
+    std::condition_variable partner_ready;
 }; // class StreamWorkerQueue
 
 #endif // ifndef STREAM_WORKER_QUEUE_STREAM_WORKER_QUEUE_HPP

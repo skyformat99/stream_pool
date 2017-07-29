@@ -17,7 +17,6 @@ function(set_cpp_restrict_qualifier)
             ${build_dir}
             ${src_dir}/test_cpp_restrict_qualifier.cpp
             COMPILE_DEFINITIONS "-DCPP_RESTRICT_QUALIFIER=${qualifer}"
-            OUTPUT_VARIABLE OOGA
         )
 
         if(qualifier_compiled)
