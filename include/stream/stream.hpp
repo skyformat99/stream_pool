@@ -18,11 +18,12 @@ public:
 
     Stream();
     ~Stream();
-    bool start();
+    void start();
     bool read(std::string &message);
     bool write(std::string &&payload);
 
     static time_point now();
+
 
 private:
     static const std::chrono::seconds max_lifespan;

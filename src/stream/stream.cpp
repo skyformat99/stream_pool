@@ -21,6 +21,7 @@ Stream::~Stream()
 {}
 
 
+void
 Stream::start()
 {
     continue_writing = true;
