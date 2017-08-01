@@ -1,17 +1,17 @@
 all: init_build
-	make --directory=build all
+	cmake --build build --target all
 
 test: init_build
-	make --directory=build test
+	cmake --build build --target test
 
 test_verbose: init_build
-	make --directory=build test_verbose
+	cmake --build build --target test_verbose
 
 build_test: init_build
-	make --directory=build build_test
+	cmake --build build --target build_test
 
 build_test_verbose: init_build
-	make --directory=build build_test_verbose
+	cmake --build build --target build_test_verbose
 
 init_build:
 	cmake -E make_directory build

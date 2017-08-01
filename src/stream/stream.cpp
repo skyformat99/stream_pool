@@ -5,15 +5,18 @@
 
 // STATIC DATA
 // =============================================================================
-static const std::chrono::seconds Stream::max_lifespan(15);
-static const std::chrono::seconds Stream::max_downtime(5);
+const std::chrono::seconds Stream::max_lifespan(15);
+const std::chrono::seconds Stream::max_downtime(5);
 
 // fail roughly 1 in 100 queries
-static const unsigned int Stream::expected_query_lifespan(100);
+const unsigned int Stream::expected_query_lifespan(100);
 
 
 Stream::Stream()
     : failure_box(expected_query_lifespan),
+      continue_writing(),
+      expiry(),
+      idle_timeout()
 {}
 
 
@@ -33,8 +36,8 @@ Stream::start()
 bool
 Stream::read(std::string &message)
 {
-    const std::chrono::seconds &timeout = std::min(idle_timeout,
-                                                   expiry);
+    const time_point &timeout = std::min(idle_timeout,
+                                         expiry);
 
     const bool success = failure_box.query()
                       && dequeue_wait_until(message,

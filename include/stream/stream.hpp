@@ -1,3 +1,5 @@
+#ifndef STREAM_POOL_STREAM_STREAM_HPP
+#define STREAM_POOL_STREAM_STREAM_HPP
 
 // EXTERNAL DEPENDENCIES
 // =============================================================================
@@ -7,7 +9,6 @@
 #include <atomic>                            // std::atomic
 #include "blocking_queue/blocking_queue.hpp" // BlockingQueue
 #include "failure_box/failure_box.hpp"       // FailureBox
-#include "stream_common/stream_common.hpp"   // FailureBox
 
 
 
@@ -32,7 +33,7 @@ private:
 
     std::atomic<bool> continue_writing;
     time_point        idle_timeout;
-    const time_point  expiry;
+    time_point        expiry;
     FailureBox        failure_box;
 }; // class Stream
 
