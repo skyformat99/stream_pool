@@ -5,7 +5,7 @@
 // =============================================================================
 #include <chrono>             // std::chrono::*
 #include <deque>              // std::deque
-#include <mutex>              // std::[timed_mutex|unique_lock|lock_guard]
+#include <mutex>              // std::[mutex|unique_lock|lock_guard]
 #include <condition_variable> // std::condition_variable
 #include <utility>            // std::[move|forward]
 
@@ -30,7 +30,7 @@ public:
     enqueue(const T &element)
     {
         {
-            std::lock_guard<std::timed_mutex> lock(waiting);
+            std::lock_guard<std::mutex> lock(waiting);
             this->push_back(element);
         }
         ready.notify_one();
@@ -40,7 +40,7 @@ public:
     enqueue(T &&element)
     {
         {
-            std::lock_guard<std::timed_mutex> lock(waiting);
+            std::lock_guard<std::mutex> lock(waiting);
             this->push_back(std::move(element));
         }
         ready.notify_one();
@@ -51,7 +51,7 @@ public:
     enqueue_emplace(Args &&...args)
     {
         {
-            std::lock_guard<std::timed_mutex> lock(waiting);
+            std::lock_guard<std::mutex> lock(waiting);
             this->emplace_back(std::forward(args)...);
         }
         ready.notify_one();
@@ -81,7 +81,7 @@ public:
     T   
     dequeue_wait()
     {
-        std::unique_lock<std::timed_mutex> lock(waiting);
+        std::unique_lock<std::mutex> lock(waiting);
         ready.wait(lock, [this] {
             return !this->empty();
         });
@@ -104,19 +104,15 @@ public:
                        const std::chrono::time_point<Clock, Duration> &timeout)
     {
         bool success;
-        std::unique_lock<std::timed_mutex> lock(waiting,
-                                                timeout);
-        success = lock.owns_lock();
+        std::unique_lock<std::mutex> lock(waiting);
+
+        success = ready.wait_until(lock, timeout, [this] {
+            return !this->empty();
+        });
 
         if (success) {
-            success = ready.wait_until(lock, timeout, [this] {
-                return !this->empty();
-            });
-
-            if (success) {
-                element = std::move(this->front());
-                this->pop_front();
-            }
+            element = std::move(this->front());
+            this->pop_front();
         }
 
         return success;
@@ -132,7 +128,7 @@ public:
 
 
 private:
-    std::timed_mutex        waiting;
+    std::mutex              waiting;
     std::condition_variable ready;
 }; // class BlockingQueue
 
