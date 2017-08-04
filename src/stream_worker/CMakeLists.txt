@@ -2,6 +2,8 @@ set(STREAM_WORKER_INCLUDE_DIR ${PROJECT_INCLUDE_DIR}/stream_worker)
 set(
     STREAM_WORKER_HEADERS
     ${STREAM_WORKER_INCLUDE_DIR}/stream_worker.hpp
+    ${STREAM_SESSION_INCLUDE_DIR}/stream_session.hpp
+    ${STREAM_WORKER_QUEUE_INCLUDE_DIR}/stream_worker_queue.hpp
 )
 set(
     sources
