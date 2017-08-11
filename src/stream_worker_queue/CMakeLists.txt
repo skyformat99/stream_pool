@@ -1,4 +1,3 @@
-set(STREAM_INCLUDE_DIR ${PROJECT_INCLUDE_DIR}/stream_worker_queue)
 set(
     STREAM_WORKER_HEADERS
     ${STREAM_INCLUDE_DIR}/stream_worker_queue.hpp
