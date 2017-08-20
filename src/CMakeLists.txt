@@ -21,6 +21,7 @@ set(STREAM_INCLUDE_DIR              ${PROJECT_INCLUDE_DIR}/stream)
 set(STREAM_WORKER_QUEUE_INCLUDE_DIR ${PROJECT_INCLUDE_DIR}/stream_worker_queue)
 set(STREAM_WORKER_INCLUDE_DIR       ${PROJECT_INCLUDE_DIR}/stream_worker)
 set(STREAM_SESSION_INCLUDE_DIR      ${PROJECT_INCLUDE_DIR}/stream_session)
+set(BLOCKING_QUEUE_INCLUDE_DIR      ${PROJECT_INCLUDE_DIR}/blocking_queue)
 
 add_subdirectory(blocking_queue)
 add_subdirectory(failure_box)

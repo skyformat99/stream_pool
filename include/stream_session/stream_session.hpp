@@ -3,10 +3,10 @@
 
 // EXTERNAL DEPENDENCIES
 // =============================================================================
-// #include <unordered_map>      // std::unordered_map
-#include <ostream>            // std::ostream
-#include <thread>             // std::thread
-#include <chrono>             // std::chrono
+#include <map>      // std::map (iterators must remain valid throughout mods)
+#include <ostream>  // std::ostream
+#include <thread>   // std::thread
+#include <chrono>   // std::chrono
 
 #include "blocking_queue/blocking_queue.hpp" // BlockingQueue
 #include "stream/stream.hpp"                 // Stream::
