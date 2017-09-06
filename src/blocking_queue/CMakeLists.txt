@@ -1,7 +1,8 @@
-set(
-    BLOCKING_QUEUE_HEADERS
-    ${BLOCKING_QUEUE_INCLUDE_DIR}/blocking_queue.hpp
-)
+set(BLOCKING_QUEUE_HEADERS
+    ${BLOCKING_QUEUE_INCLUDE_DIR}/blocking_queue.hpp)
+set(BLOCKING_QUEUE_HEADERS
+    ${BLOCKING_QUEUE_HEADERS}
+    PARENT_SCOPE)
 
 if(BUILD_TESTING)
     add_subdirectory(test)

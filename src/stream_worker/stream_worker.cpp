@@ -19,8 +19,9 @@ void
 loop(StreamWorkerQueue &schedule)
 {
     StreamSession *session;
-    void (StreamSession::*task)();
 
-    while (task = schedule.dequeue(session))
+    StreamSession::Task task;
+
+    while (task = schedule.dequeue(session), task)
         session->*task();
 }

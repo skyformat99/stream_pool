@@ -5,7 +5,7 @@
 // =============================================================================
 #include <map>      // std::map (iterators must remain valid throughout mods)
 #include <ostream>  // std::ostream
-#include <thread>   // std::thread
+// #include <thread>   // std::thread
 #include <chrono>   // std::chrono
 
 #include "blocking_queue/blocking_queue.hpp" // BlockingQueue
@@ -27,6 +27,7 @@ class StreamSession
 {
 public:
     typedef std::map<std::string, StreamSession> Register;
+    typedef void (StreamSession::*Task)();
 
     StreamSession();
     ~StreamSession();
@@ -37,8 +38,10 @@ public:
     void stop();
 
 private:
-    friend std::thread;
+    // friend std::thread;
+    friend class StreamWorkerQueue;
 
+    // 'Task's
     void reader_loop();
     void writer_loop();
 

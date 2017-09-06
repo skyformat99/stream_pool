@@ -8,12 +8,13 @@
 #include <mutex>              // std::[mutex|lock_guard]
 #include <condition_variable> // std::condition_variable
 
+#include "stream_session/stream_session.hpp" // StreamSession
+
 
 
 // FORWARD DECLARATIONS
 // =============================================================================
 class StreamSession;
-
 
 class StreamWorkerQueue : private std::deque<StreamSession *>
 {
@@ -27,7 +28,7 @@ public:
     void
     enqueue(StreamSession *const session);
 
-    void (StreamSession::*)()
+    StreamSession::Task
     dequeue(StreamSession *&session);
 
 

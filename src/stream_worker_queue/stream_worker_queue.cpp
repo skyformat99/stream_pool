@@ -42,7 +42,7 @@ StreamWorkerQueue::enqueue(StreamSession *const session)
 }
 
 
-void (StreamSession::*)()
+StreamSession::Task
 StreamWorkerQueue::dequeue(StreamSession *&session)
 {
     std::unique_lock<std::mutex> lock(waiting);
@@ -59,7 +59,7 @@ StreamWorkerQueue::dequeue(StreamSession *&session)
         need_partner = false;
         partner_ready.notify_one();
         this->pop_front();
-        return &Session::writer_loop;
+        return &StreamSession::writer_loop;
     }
 
     need_partner = true;
@@ -72,5 +72,5 @@ StreamWorkerQueue::dequeue(StreamSession *&session)
         return nullptr;
     }
 
-    return &Session::reader_loop;
+    return &StreamSession::reader_loop;
 }

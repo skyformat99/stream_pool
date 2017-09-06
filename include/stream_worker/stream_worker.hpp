@@ -17,6 +17,7 @@ class StreamWorker : public std::thread
 public:
     StreamWorker(StreamWorkerQueue &schedule);
     StreamWorker();
+    ~StreamWorker();
 
     static void
     loop(StreamWorkerQueue &schedule);
