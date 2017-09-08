@@ -1,12 +1,14 @@
-set(STREAM_WORKER_QUEUE_HEADERS
-    ${STREAM_WORKER_QUEUE_INCLUDE_DIR}/stream_worker_queue.hpp)
-set(STREAM_WORKER_QUEUE_HEADERS
+set(headers
     ${STREAM_WORKER_QUEUE_HEADERS}
-    PARENT_SCOPE)
+    ${STREAM_SESSION_HEADERS})
+list(REMOVE_DUPLICATES headers)
 
-add_library(stream_worker_queue stream_worker_queue.cpp
-                                ${STREAM_WORKER_QUEUE_HEADERS}
-                                ${STREAM_SESSION_HEADERS})
+add_library(stream_worker_queue
+            stream_worker_queue.cpp
+            ${headers})
+
+target_link_libraries(stream_worker_queue
+                      PUBLIC stream_session)
 
 if(BUILD_TESTING)
     add_subdirectory(test)

@@ -1,11 +1,10 @@
-set(STREAM_HEADERS
-    ${STREAM_INCLUDE_DIR}/stream.hpp)
+add_library(stream
+            stream.cpp
+            ${STREAM_HEADERS})
 
-set(STREAM_HEADERS
-    ${STREAM_HEADERS}
-    PARENT_SCOPE)
-
-add_library(stream stream.cpp ${STREAM_HEADERS})
+target_link_libraries(stream
+                      PUBLIC blocking_queue
+                      PUBLIC failure_box)
 
 if(BUILD_TESTING)
     add_subdirectory(test)

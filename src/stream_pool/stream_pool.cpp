@@ -1,5 +1,5 @@
-#include "stream_pool/stream_pool.hpp" // StreamPool::*
 #include <iostream>                    // std::cout
+#include "stream_pool/stream_pool.hpp" // StreamPool::*
 
 
 

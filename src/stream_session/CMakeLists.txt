@@ -1,12 +1,17 @@
-set(STREAM_SESSION_HEADERS
-    ${PROJECT_INCLUDE_DIR}/stream_session/stream_session.hpp)
-set(STREAM_SESSION_HEADERS
-    ${STREAM_SESSION_HEADERS}
-    PARENT_SCOPE)
-
-
 # build stream_session library
-add_library(stream_session stream_session.cpp ${STREAM_SESSION_HEADERS})
+set(headers
+    ${STREAM_SESSION_HEADERS}
+    ${STREAM_POOL_HEADERS})
+list(REMOVE_DUPLICATES headers)
+
+add_library(stream_session
+            stream_session.cpp
+            ${headers})
+
+target_link_libraries(stream_session
+                      PUBLIC blocking_queue
+                      PUBLIC stream
+                      PUBLIC stream_pool)
 
 
 if(BUILD_TESTING)

@@ -5,9 +5,9 @@
 // =============================================================================
 #include <climits>                           // UCHAR_MAX
 #include <string>                            // std::string
-#include <blocking_queue/blocking_queue.hpp> // BlockingQueue
-#include <stream_session/stream_session.hpp> // StreamSession
-#include <stream_worker/stream_worker.hpp>   // StreamWorker
+#include "blocking_queue/blocking_queue.hpp" // BlockingQueue
+#include "stream_session/stream_session.hpp" // StreamSession
+#include "stream_worker/stream_worker.hpp"   // StreamWorker
 
 #ifdef BUILD_TESTING
 #   include <gtest/gtest.h>                       // FRIEND_TEST

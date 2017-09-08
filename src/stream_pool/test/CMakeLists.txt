@@ -3,6 +3,6 @@ foreach(test_name constructors)
         NAME      test_stream_pool_${test_name}
         SOURCES   test_stream_pool_${test_name}.cpp
                   ${STREAM_POOL_HEADERS}
-        LIBRARIES ${STREAM_POOL_LIBRARY}
+        LIBRARIES stream_pool
     )
 endforeach()

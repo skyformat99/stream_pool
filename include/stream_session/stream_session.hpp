@@ -9,7 +9,7 @@
 #include <chrono>   // std::chrono
 
 #include "blocking_queue/blocking_queue.hpp" // BlockingQueue
-#include "stream/stream.hpp"                 // Stream::
+#include "stream/stream.hpp"                 // Stream
 
 #ifdef STREAM_POOL_TESTING_ENABLED
 #   include <gtest/gtest.h> // FRIEND_TEST

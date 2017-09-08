@@ -1,9 +1,12 @@
-#include <chrono>                      // std::chrono::system_clock::now
-#include <failure_box/failure_box.hpp> // FailureBox
+#include <chrono> // std::chrono::system_clock::now
 
 #if !HAVE_CPP_THREAD_LOCAL
 #   include <atomic> // std::atomic_flag
 #endif // if !HAVE_CPP_THREAD_LOCAL
+
+#include "failure_box/failure_box.hpp" // FailureBox
+
+
 
 namespace {
 
