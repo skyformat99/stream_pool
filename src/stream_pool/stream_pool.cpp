@@ -90,7 +90,7 @@ StreamPool::session_ready(StreamSession *const session)
 }
 
 void
-withdraw(StreamSession::Record &entry)
+withdraw(StreamSession::Register::iterator &entry)
 {
     sessions.erase(entry);
 }

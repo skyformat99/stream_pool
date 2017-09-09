@@ -35,9 +35,9 @@ private:
 
     void stop_session(const std::string &id);
 
-    void withdraw(StreamSession::Record &entry);
+    void withdraw(StreamSession::Register::iterator &entry);
 
-    std::mutex
+    std::mutex                     session_register_lock;
     StreamSession::Register        session_register;
     BlockingQueue<StreamSession *> ready_sessions;
     StreamWorker                   workers[8];

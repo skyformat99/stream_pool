@@ -4,17 +4,17 @@
 
 
 
-static const std::chrono::seconds StreamSession::max_idle(3);
+const std::chrono::seconds StreamSession::max_idle(3);
 
 
 StreamSession::StreamSession()
 {}
 
-~StreamSession::StreamSession()
+StreamSession::~StreamSession()
 {}
 
 void
-StreamSession::start(Register::iterator &entry,
+StreamSession::start(StreamSession::Register::iterator &entry,
                      StreamPool *const pool)
 {
     this->keep_alive = true;

@@ -3,7 +3,6 @@ add_library(stream
             ${STREAM_HEADERS})
 
 target_link_libraries(stream
-                      PUBLIC blocking_queue
                       PUBLIC failure_box)
 
 if(BUILD_TESTING)

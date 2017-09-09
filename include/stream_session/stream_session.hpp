@@ -41,6 +41,8 @@ private:
     // friend std::thread;
     friend class StreamWorkerQueue;
 
+    static const std::chrono::seconds max_idle;
+
     // 'Task's
     void reader_loop();
     void writer_loop();
@@ -52,7 +54,7 @@ private:
     BlockingQueue<std::string> mailbox;
     Stream                     stream;
     Register::iterator         entry;
-    StreamPool          *const pool;
+    StreamPool                *pool;
 }; // class StreamSession
 
 #endif // ifndef STREAM_POOL_STREAM_SESSION_STREAM_SESSION_HPP
