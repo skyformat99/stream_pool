@@ -52,7 +52,7 @@ public:
     {
         {
             std::lock_guard<std::mutex> lock(waiting);
-            this->emplace_back(std::forward(args)...);
+            this->emplace_back(std::forward<Args>(args)...);
         }
         ready.notify_one();
     }
@@ -73,7 +73,7 @@ public:
     void
     enqueue_emplace_unlocked(Args &&...args)
     {
-        this->emplace_back(std::forward(args)...);
+        this->emplace_back(std::forward<Args>(args)...);
     }
 
     // dequeue
@@ -94,8 +94,8 @@ public:
     dequeue_wait_for(T &element,
                      const std::chrono::duration<Rep, Period> &duration)
     {
-        dequeue_wait_until(element,
-                           std::chrono::system_clock::now() + duration);
+        return dequeue_wait_until(element,
+                                  std::chrono::system_clock::now() + duration);
     }
 
     template<typename Clock, typename Duration>

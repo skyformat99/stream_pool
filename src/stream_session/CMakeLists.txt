@@ -9,7 +9,6 @@ add_library(stream_session
             ${headers})
 
 target_link_libraries(stream_session
-                      PUBLIC blocking_queue
                       PUBLIC stream
                       PUBLIC stream_pool)
 

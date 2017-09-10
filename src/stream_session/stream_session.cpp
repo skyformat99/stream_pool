@@ -1,3 +1,4 @@
+#include <iostream>                          // std::cout
 #include <utility>                           // std::move
 #include "stream_session/stream_session.hpp" // StreamSession
 #include "stream_pool/stream_pool.hpp"       // StreamPool
@@ -70,7 +71,7 @@ StreamSession::writer_loop()
                                        max_idle)
            && keep_alive
            && stream.write(std::move(message)))
-        log("writer_loop") << "wrote message (" << counter++ ')' << std::endl;
+        log("writer_loop") << "wrote message (" << counter++ <<  ')' << std::endl;
 
     log("writer_loop") << "exit" << std::endl;
 

@@ -33,6 +33,8 @@ private:
     void route(std::string &&session_id,
                std::string &&payload);
 
+    void session_ready(StreamSession *const session);
+
     void stop_session(const std::string &id);
 
     void withdraw(StreamSession::Register::iterator &entry);

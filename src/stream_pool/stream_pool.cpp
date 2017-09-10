@@ -80,12 +80,12 @@ void
 StreamPool::route(std::string &&session_id,
                   std::string &&payload)
 {
-
 }
 
 void
 StreamPool::session_ready(StreamSession *const session)
 {
+    std::lock_guard<std::mutex>(session_register_lock);
     starting_sessions.enqueue_emplace(session);
 }
 
