@@ -4,14 +4,9 @@ set(headers
     ${STREAM_POOL_HEADERS})
 list(REMOVE_DUPLICATES headers)
 
-add_library(stream_session
+add_library(stream_session OBJECT
             stream_session.cpp
             ${headers})
-
-target_link_libraries(stream_session
-                      PUBLIC stream
-                      PUBLIC stream_pool)
-
 
 if(BUILD_TESTING)
     add_subdirectory(test)

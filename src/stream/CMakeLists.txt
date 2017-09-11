@@ -1,9 +1,6 @@
-add_library(stream
+add_library(stream OBJECT
             stream.cpp
             ${STREAM_HEADERS})
-
-target_link_libraries(stream
-                      PUBLIC failure_box)
 
 if(BUILD_TESTING)
     add_subdirectory(test)
