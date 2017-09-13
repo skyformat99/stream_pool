@@ -3,11 +3,11 @@
 
 // EXTERNAL DEPENDENCIES
 // =============================================================================
-#include <climits>                           // UCHAR_MAX
-#include <string>                            // std::string
-#include "blocking_queue/blocking_queue.hpp" // BlockingQueue
-#include "stream_session/stream_session.hpp" // StreamSession
-#include "stream_worker/stream_worker.hpp"   // StreamWorker
+#include <climits>                                     // UCHAR_MAX
+#include <string>                                      // std::string
+#include "stream_session/stream_session.hpp"           // StreamSession
+#include "stream_worker/stream_worker.hpp"             // StreamWorker
+#include "stream_worker_queue/stream_worker_queue.hpp" // StreamWorkerQueue
 
 #ifdef BUILD_TESTING
 #   include <gtest/gtest.h>                       // FRIEND_TEST
@@ -39,10 +39,10 @@ private:
 
     void withdraw(StreamSession::Register::iterator &entry);
 
-    std::mutex                     session_register_lock;
-    StreamSession::Register        session_register;
-    BlockingQueue<StreamSession *> ready_sessions;
-    StreamWorker                   workers[8];
+    std::mutex              session_register_lock;
+    StreamSession::Register session_register;
+    StreamWorkerQueue       ready_sessions;
+    StreamWorker            workers[8];
 }; // class StreamPool
 
 #endif // ifndef STREAM_POOL_STREAM_POOL_HPP

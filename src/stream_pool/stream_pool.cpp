@@ -6,7 +6,7 @@
 // STATIC DATA
 // =============================================================================
 StreamPool::StreamPool()
-    : sessions(),
+    : session_register(),
       ready_sessions(),
       workers {
           StreamWorker(ready_sessions),
@@ -92,5 +92,5 @@ StreamPool::session_ready(StreamSession *const session)
 void
 withdraw(StreamSession::Register::iterator &entry)
 {
-    sessions.erase(entry);
+    session_register.erase(entry);
 }
