@@ -23,5 +23,5 @@ loop(StreamWorkerQueue &schedule)
     StreamSession::Task task;
 
     while (task = schedule.dequeue(session), task)
-        session->*task();
+        (session->*task)();
 }
