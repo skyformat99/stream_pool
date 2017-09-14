@@ -9,14 +9,22 @@ StreamPool::StreamPool()
     : session_register(),
       ready_sessions(),
       workers {
-          StreamWorker(ready_sessions),
-          StreamWorker(ready_sessions),
-          StreamWorker(ready_sessions),
-          StreamWorker(ready_sessions),
-          StreamWorker(ready_sessions),
-          StreamWorker(ready_sessions),
-          StreamWorker(ready_sessions),
-          StreamWorker(ready_sessions)
+          { ready_sessions },
+          { ready_sessions },
+          { ready_sessions },
+          { ready_sessions },
+          { ready_sessions },
+          { ready_sessions },
+          { ready_sessions },
+          { ready_sessions }
+          // StreamWorker(ready_sessions),
+          // StreamWorker(ready_sessions),
+          // StreamWorker(ready_sessions),
+          // StreamWorker(ready_sessions),
+          // StreamWorker(ready_sessions),
+          // StreamWorker(ready_sessions),
+          // StreamWorker(ready_sessions),
+          // StreamWorker(ready_sessions)
       }
 {
     std::cout << "StreamPool::StreamPool()" << std::endl;
@@ -29,7 +37,7 @@ StreamPool::~StreamPool()
 
     stop_sessions();
 
-    starting_sessions.stop();
+    ready_sessions.stop();
 
     for (StreamWorker &worker : workers)
         worker.join();
@@ -72,8 +80,8 @@ StreamPool::listen()
 void
 StreamPool::stop_sessions()
 {
-    for (StreamSession::Register::iterator entry : session_register)
-        entry->second.stop();
+    for (StreamSession::Register::value_type &entry : session_register)
+        entry.second.stop();
 }
 
 void
@@ -85,12 +93,12 @@ StreamPool::route(std::string &&session_id,
 void
 StreamPool::session_ready(StreamSession *const session)
 {
-    std::lock_guard<std::mutex>(session_register_lock);
-    starting_sessions.enqueue_emplace(session);
+    std::lock_guard<std::mutex> lock(session_register_lock);
+    ready_sessions.enqueue(session);
 }
 
 void
-withdraw(StreamSession::Register::iterator &entry)
+StreamPool::withdraw(StreamSession::Register::iterator &entry)
 {
     session_register.erase(entry);
 }

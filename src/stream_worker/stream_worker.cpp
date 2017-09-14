@@ -16,7 +16,7 @@ StreamWorker::~StreamWorker()
 
 
 void
-loop(StreamWorkerQueue &schedule)
+StreamWorker::loop(StreamWorkerQueue &schedule)
 {
     StreamSession *session;
 
