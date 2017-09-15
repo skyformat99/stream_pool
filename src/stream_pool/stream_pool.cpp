@@ -17,14 +17,6 @@ StreamPool::StreamPool()
           { ready_sessions },
           { ready_sessions },
           { ready_sessions }
-          // StreamWorker(ready_sessions),
-          // StreamWorker(ready_sessions),
-          // StreamWorker(ready_sessions),
-          // StreamWorker(ready_sessions),
-          // StreamWorker(ready_sessions),
-          // StreamWorker(ready_sessions),
-          // StreamWorker(ready_sessions),
-          // StreamWorker(ready_sessions)
       }
 {
     std::cout << "StreamPool::StreamPool()" << std::endl;
@@ -80,6 +72,8 @@ StreamPool::listen()
 void
 StreamPool::stop_sessions()
 {
+    stop
+    std::lock_guard<std::mutex> lock(session_register_lock);
     for (StreamSession::Register::value_type &entry : session_register)
         entry.second.stop();
 }
@@ -93,12 +87,12 @@ StreamPool::route(std::string &&session_id,
 void
 StreamPool::session_ready(StreamSession *const session)
 {
-    std::lock_guard<std::mutex> lock(session_register_lock);
     ready_sessions.enqueue(session);
 }
 
 void
 StreamPool::withdraw(StreamSession::Register::iterator &entry)
 {
+    std::lock_guard<std::mutex> lock(session_register_lock);
     session_register.erase(entry);
 }
