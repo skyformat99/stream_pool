@@ -3,8 +3,8 @@
 
 // EXTERNAL DEPENDENCIES
 // =============================================================================
-#include <climits>                                     // UCHAR_MAX
 #include <string>                                      // std::string
+#include <atomic>                                      // std::atomic
 #include "stream_session/stream_session.hpp"           // StreamSession
 #include "stream_worker/stream_worker.hpp"             // StreamWorker
 #include "stream_worker_queue/stream_worker_queue.hpp" // StreamWorkerQueue
@@ -39,6 +39,7 @@ private:
 
     void withdraw(StreamSession::Register::iterator &entry);
 
+    std::atomic<bool>       sessions_
     std::mutex              session_register_lock;
     StreamSession::Register session_register;
     StreamWorkerQueue       ready_sessions;

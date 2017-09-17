@@ -83,8 +83,8 @@ std::ostream &
 StreamSession::log(const char *const function_name)
 {
     return std::cout
-        << "StreamSession(" << entry->first // session_id
-                    << ", " << this
-                    << ", " << std::this_thread::get_id()
+        << "StreamSession(session_id=" << entry->first // session_id
+                    << ", this="       << this
+                    << ", thread_id="  << std::this_thread::get_id()
                             << ")::" << function_name << "() -- ";
 }
